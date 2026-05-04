@@ -89,30 +89,82 @@ Dates live in [`lifecycle_data.yaml`](lifecycle_data.yaml). The source of
 truth is **F5 K4309: Hardware Product Lifecycle Support Policy** at
 <https://my.f5.com/manage/s/article/K4309>.
 
-When F5 updates K4309 (typically a few times a year as new EoS announcements
-land):
+A maintenance CLI (`update_lifecycle.py`) makes the manual update safe.
+The recommended workflow:
 
-1. Open [`lifecycle_data.yaml`](lifecycle_data.yaml) in any text editor.
-2. Update the dates for affected families, or copy/paste an existing entry
-   to add a new family.
-3. Bump `data_revision:` at the top to today's date.
-4. Commit and push.
+```bash
+# 1. Open K4309 in a browser, eyeball changed entries.
 
-Each entry has the same shape:
+# 2. Edit lifecycle_data.yaml by hand
+#    (date change, status flip, new family, etc.)
+$ vim lifecycle_data.yaml
+
+# 3. Run the validator + matcher tests.
+$ ./update_lifecycle.py check
+validate:
+OK: 11 families, 18 hardware patterns, 6 non-hardware groups
+test:
+OK: 46 fixture SKUs all classified correctly
+
+# 4. See exactly what changed (great for the commit message).
+$ ./update_lifecycle.py diff
+Changed: bigip-i4600  BIG-IP iSeries i4600
+    end_of_technical_support: 2031-01-01 → 2032-06-30
+    end_of_rma:                2031-01-01 → 2032-06-30
+
+Added families (1):
+  + bigip-i7800  BIG-IP iSeries i7800
+
+# 5. Auto-set data_revision to today (only if YAML actually changed).
+$ ./update_lifecycle.py bump-revision
+data_revision: 2026-05-04 → 2026-08-12
+
+# 6. Commit & push.
+$ git commit -am "Update F5 lifecycle: i4600 dates, add i7800"
+```
+
+### CLI subcommands
+
+| Command | Does |
+|---|---|
+| `validate` | Schema, regex, date-ordering, status-vs-dates consistency checks. |
+| `test` | Runs the matcher against [`fixtures/sku_corpus.yaml`](fixtures/sku_corpus.yaml) — every known SKU must classify correctly. Catches accidental regex regressions. |
+| `diff` | Shows added / removed / changed families vs git HEAD. |
+| `bump-revision` | Sets `data_revision:` to today if the YAML content changed since HEAD. No-op otherwise. |
+| `check` | `validate` + `test`. Suitable as a pre-commit hook. Exits non-zero on any failure. |
+
+All subcommands are offline (no network, no API keys). Exit code is non-zero
+on any failure so you can wire them into CI or a git hook.
+
+### YAML schema
+
+Each family entry has the same shape:
 
 ```yaml
-- family_id: bigip-i4600
+- family_id: bigip-i4600                     # short, stable id (also used in fixtures)
   display_name: BIG-IP iSeries i4600
-  hw_code: C115
-  status: eosd                       # regular | regular_no_eos | eos_announced | eosd | eots
-  end_of_sale: 2024-01-01
+  hw_code: C115                              # F5's internal platform code, optional
+  status: eosd                               # regular | regular_no_eos | eos_announced | eosd | eots
+  end_of_sale: 2024-01-01                    # ISO date or null
   end_of_software_dev: 2026-01-01
   end_of_technical_support: 2031-01-01
   end_of_rma: 2031-01-01
-  sku_patterns:
+  sku_patterns:                              # case-insensitive regexes; anchor with ^ and $
     - '^F5-BIG-.*-I4600(-.*)?$'
     - '^F5-BIG-I4600(-.*)?$'
 ```
+
+When you add a new family, also add at least one SKU under that
+`family_id` in [`fixtures/sku_corpus.yaml`](fixtures/sku_corpus.yaml) so
+`test` covers it going forward.
+
+### Why not auto-scrape K4309?
+
+K4309 is JavaScript-rendered behind F5's portal — `curl` returns an empty
+shell, and a headless-browser scraper would be brittle. F5 also expects
+customers to verify dates against K4309 directly, so any scraper still
+leaves you reviewing every change manually. The CLI above makes that
+manual step safe and quick instead of trying to eliminate it.
 
 Always **verify against K4309** before relying on dates in a customer
 deliverable — the local DB is a convenience cache, not authoritative.
@@ -135,15 +187,18 @@ file in a `sample_data/` folder — the gitignore allows that path explicitly.
 
 ```
 F5-eosfinder/
-├── app.py                 Flask web app (one upload endpoint)
-├── matcher.py             SKU normalization + lifecycle lookup
-├── annotator.py           Excel walker that writes the new columns
-├── lifecycle_data.yaml    The lifecycle database — edit this to update dates
+├── app.py                  Flask web app (one upload endpoint)
+├── matcher.py              SKU normalization + lifecycle lookup
+├── annotator.py            Excel walker that writes the new columns
+├── lifecycle_data.yaml     The lifecycle database — edit this to update dates
+├── update_lifecycle.py     Maintenance CLI (validate / test / diff / bump-revision)
+├── fixtures/
+│   └── sku_corpus.yaml     Known-good SKU fixtures used by `update_lifecycle.py test`
 ├── templates/
-│   └── index.html         Upload form
-├── requirements.txt       Python deps (Flask, openpyxl, PyYAML)
-├── run.sh                 Mac / Linux launcher
-├── run.bat                Windows launcher
+│   └── index.html          Upload form
+├── requirements.txt        Python deps (Flask, openpyxl, PyYAML)
+├── run.sh                  Mac / Linux launcher
+├── run.bat                 Windows launcher
 └── README.md
 ```
 

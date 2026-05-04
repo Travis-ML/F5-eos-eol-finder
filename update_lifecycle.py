@@ -426,12 +426,15 @@ def cmd_bump_revision(args) -> int:
 
 
 def cmd_check(args) -> int:
-    rc = 0
     print(bold("validate:"))
-    rc |= cmd_validate(args)
+    rc = cmd_validate(args)
+    if rc != 0:
+        # Skip test: a broken YAML will just make the matcher crash on load,
+        # which is noise on top of the real validate errors.
+        print(yellow("\ntest: skipped (validate failed; fix the errors above first)"))
+        return rc
     print(bold("\ntest:"))
-    rc |= cmd_test(args)
-    return rc
+    return cmd_test(args)
 
 
 # ---------- main ------------------------------------------------------------
