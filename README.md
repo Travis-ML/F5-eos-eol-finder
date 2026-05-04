@@ -16,16 +16,16 @@ You need **Python 3.10 or newer**. That's it.
 ### macOS / Linux
 
 ```bash
-git clone https://github.com/<your-org>/F5-eosfinder.git
-cd F5-eosfinder
+git clone https://github.com/Travis-ML/F5-eos-eol-finder.git
+cd F5-eos-eol-finder
 ./run.sh
 ```
 
 ### Windows
 
 ```bat
-git clone https://github.com/<your-org>/F5-eosfinder.git
-cd F5-eosfinder
+git clone https://github.com/Travis-ML/F5-eos-eol-finder.git
+cd F5-eos-eol-finder
 run.bat
 ```
 
