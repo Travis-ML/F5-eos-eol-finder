@@ -1,0 +1,79 @@
+# Known-good SKU corpus for regression testing.
+#
+# When `update_lifecycle.py test` runs, it normalizes each SKU below and
+# verifies the matcher's classification matches the expected bucket.
+# This catches accidental regex changes that would silently misclassify
+# real customer line items.
+#
+# Add new SKUs here whenever you encounter them in the wild.
+
+hardware:
+  bigip-i2800:
+    - F5-BIG-LTM-I2800
+    - F5-BIG-I2800
+  bigip-i4600:
+    - F5-BIG-LTM-I4600
+    - F5-BIG-I4600
+  bigip-i5820:
+    - F5-BIG-LTM-I5820-DF
+    - F5-BIG-LTM-I5820
+  bigip-i10800:
+    - F5-BIG-I10800
+    - F5-BIG-LTM-I10800
+  bigip-r4800:
+    - F5-BIG-R4800
+    - F5-BIG-LTM-R4800
+  bigip-r10900:
+    - F5-BIG-R10900
+    - F5-BIG-LTM-R10900
+  bigip-10350v-fips:
+    - F5-BIG-LTM-10350V-F
+  viprion-c2400:
+    - F5-VPR-LTM-C2400-ACT
+    - F5-VPR-LTM-C2400-AC
+    - F5-VPR-LTM-C2400-DC
+  viprion-b2250:
+    - F5-VPR-LTM-B2250
+  velos-bx110:
+    - F5-VEL-BX110
+  velos-cx410:
+    - F5-VEL-CX410-AC
+    - F5-VEL-CX410-DC
+
+non_hardware:
+  Service contract:
+    - F5-SVC-BIG-PRE-L1-3
+    - F5-SVC-RMA-OPT
+    - F5-SVC-BIG-RMA4
+    - F5-SVC-VPR-PRE-L1-3
+    - F5-SVC-VPR-RMA4
+    - F5-SVC-BIG-VE+PREL13
+    - F5-SVC-BIQ-VE-PREL13
+  Virtual Edition (software):
+    - F5-BIG-LTM-VE-10GV18
+    - F5-BIG-MSP-A-BTIPITC10G
+    - F5-BIG-MSP-A-BTSSLO10GI
+    - F5-BIG-MSP-A-LTM-16
+    - F5-BT-10G-BUNDLE
+    - F5-BIG-SPTUSNATIONAL
+  BIG-IQ (management software):
+    - F5-BIQ-CE-MAX
+    - F5-BIQ-VE-LOG-NODE
+  Add-on / chassis option:
+    - F5-ADD-VPR-VCMP-2400
+    - F5-ADD-VPR-BT-C2X00
+    - F5-ADD-VPR-SSL4
+    - F5-ADD-FIPS10GPRMSUB
+  ELA / billing line:
+    - F5-ELA-BILLING
+  Consulting / professional services:
+    - F5-CST-S
+
+unknown_f5:
+  - F5-MYSTERY-NEWSKU-99
+  - F5-FUTURE-PRODUCT-X
+
+non_f5:
+  - CISCO-WS-C2960X
+  - JNPR-MX10003
+  - 'PaloAltoPA-5260'

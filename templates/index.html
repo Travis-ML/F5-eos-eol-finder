@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>F5 EoS / EoL Finder</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { max-width: 720px; margin: 4rem auto; padding: 0 1.5rem; color: #1c1c1e; line-height: 1.5; }
+    h1 { margin-bottom: 0.25rem; }
+    .sub { color: #6b6b6f; margin-top: 0; }
+    .card { border: 1px solid #d1d1d6; border-radius: 12px; padding: 1.75rem; margin-top: 2rem; }
+    label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+    input[type=file] { display: block; margin-bottom: 1.25rem; }
+    button { background: #0a66c2; color: white; border: 0; padding: 0.7rem 1.4rem;
+             border-radius: 8px; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #084a8c; }
+    .meta { margin-top: 2rem; font-size: 0.85rem; color: #6b6b6f; }
+    code { background: #f2f2f7; padding: 0.1rem 0.35rem; border-radius: 4px; }
+    ul { padding-left: 1.2rem; }
+    li { margin: 0.25rem 0; }
+  </style>
+</head>
+<body>
+  <h1>F5 EoS / EoL Finder</h1>
+  <p class="sub">Upload an Excel sales document or BOM. Get the same file back with
+  F5 hardware End-of-Sale / End-of-Software-Development / End-of-Technical-Support
+  dates appended for each F5 line item.</p>
+
+  <div class="card">
+    <form action="/annotate" method="post" enctype="multipart/form-data">
+      <label for="file">Excel file (.xlsx or .xlsm, max 10&nbsp;MB)</label>
+      <input id="file" name="file" type="file" accept=".xlsx,.xlsm" required>
+      <button type="submit">Annotate &amp; download</button>
+    </form>
+  </div>
+
+  <div class="meta">
+    <p>What this does:</p>
+    <ul>
+      <li>Walks every cell, finds anything starting with <code>F5-</code>.</li>
+      <li>Looks up the SKU's hardware family in a curated lifecycle database.</li>
+      <li>Appends columns to each row: family, status, EoS, EoSD, EoTS, EoRMA.</li>
+      <li>Service / VE / BIG-IQ / billing lines are tagged but have no hardware EoL of their own.</li>
+      <li>Adds a summary sheet at the front with counts and unknown-SKU review list.</li>
+    </ul>
+    <p>Lifecycle data revision: <code>{{ data_revision or 'unknown' }}</code> — sourced from F5 K4309. Verify before relying on dates.</p>
+  </div>
+</body>
+</html>

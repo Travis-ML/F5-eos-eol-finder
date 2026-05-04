@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor / agent
+.DS_Store
+.idea/
+.vscode/
+.claude/
+*.swp
+
+# Customer / sample data — NEVER commit real BOMs, inventories, or RFQs.
+# Anything matching these will be ignored by default. Override per-file
+# only if you've confirmed the file contains no customer or proprietary info.
+*.xlsx
+*.xlsm
+!sample_data/*.xlsx
+!sample_data/*.xlsm
+
+# Annotated outputs from local runs
+*__F5-EoL.xlsx

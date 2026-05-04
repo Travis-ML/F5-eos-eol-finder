@@ -1,0 +1,197 @@
+# F5 hardware product lifecycle data.
+#
+# Source of truth: F5 K4309 (https://my.f5.com/manage/s/article/K4309).
+# Dates seeded from F5's published lifecycle matrix as cross-referenced by
+# WorldTech IT's End-of-Life Matrix (https://wtit.com/f5-networks-end-of-life-hardware-rma-technical-software-support/).
+# Verify against K4309 quarterly. F5 may revise dates.
+#
+# Schema:
+#   data_revision: ISO date the data was last reviewed/updated
+#   families: list of hardware families with lifecycle dates and SKU patterns
+#     family_id    - short stable identifier
+#     display_name - human-readable platform name
+#     hw_code      - F5's hardware platform code (e.g. C117), if known
+#     status       - "regular" | "eos_announced" | "eosd" | "eots" | "regular_no_eos"
+#     end_of_sale, end_of_software_dev, end_of_technical_support, end_of_rma:
+#                  ISO YYYY-MM-DD or null if not announced
+#     sku_patterns - regex patterns (anchored, case-insensitive) that match
+#                    F5 SKUs known to belong to this family
+#     notes        - free text shown to the user
+#
+# Service / billing / virtual SKUs that have no hardware EoL of their own
+# are matched by `non_hardware_patterns` at the bottom of this file.
+
+data_revision: 2026-05-04
+
+families:
+  - family_id: bigip-i2800
+    display_name: BIG-IP iSeries i2800
+    hw_code: C117
+    status: eosd
+    end_of_sale: 2024-01-01
+    end_of_software_dev: 2026-01-01
+    end_of_technical_support: 2031-01-01
+    end_of_rma: 2031-01-01
+    sku_patterns:
+      - '^F5-BIG-.*-I2800(-.*)?$'
+      - '^F5-BIG-I2800(-.*)?$'
+
+  - family_id: bigip-i4600
+    display_name: BIG-IP iSeries i4600
+    hw_code: C115
+    status: eosd
+    end_of_sale: 2024-01-01
+    end_of_software_dev: 2026-01-01
+    end_of_technical_support: 2031-01-01
+    end_of_rma: 2031-01-01
+    sku_patterns:
+      - '^F5-BIG-.*-I4600(-.*)?$'
+      - '^F5-BIG-I4600(-.*)?$'
+
+  - family_id: bigip-i5820
+    display_name: BIG-IP iSeries i5820 / i5820-DF
+    hw_code: C125
+    status: regular_no_eos
+    end_of_sale: null
+    end_of_software_dev: null
+    end_of_technical_support: null
+    end_of_rma: null
+    notes: No EoS announced. Currently in F5 Regular Support.
+    sku_patterns:
+      - '^F5-BIG-.*-I5820(-.*)?$'
+      - '^F5-BIG-I5820(-.*)?$'
+
+  - family_id: bigip-i10800
+    display_name: BIG-IP iSeries i10800
+    hw_code: C116
+    status: eosd
+    end_of_sale: 2024-01-01
+    end_of_software_dev: 2026-01-01
+    end_of_technical_support: 2031-01-01
+    end_of_rma: 2031-01-01
+    sku_patterns:
+      - '^F5-BIG-.*-I10800(-.*)?$'
+      - '^F5-BIG-I10800(-.*)?$'
+
+  - family_id: bigip-r4800
+    display_name: BIG-IP rSeries r4800
+    hw_code: C131
+    status: regular_no_eos
+    end_of_sale: null
+    end_of_software_dev: null
+    end_of_technical_support: null
+    end_of_rma: null
+    notes: No EoS announced. Currently in F5 Regular Support.
+    sku_patterns:
+      - '^F5-BIG-.*-R4800(-.*)?$'
+      - '^F5-BIG-R4800(-.*)?$'
+
+  - family_id: bigip-r10900
+    display_name: BIG-IP rSeries r10900
+    hw_code: C128
+    status: regular_no_eos
+    end_of_sale: null
+    end_of_software_dev: null
+    end_of_technical_support: null
+    end_of_rma: null
+    notes: No EoS announced. Currently in F5 Regular Support.
+    sku_patterns:
+      - '^F5-BIG-.*-R10900(-.*)?$'
+      - '^F5-BIG-R10900(-.*)?$'
+
+  - family_id: bigip-10350v-fips
+    display_name: BIG-IP 10350v-F (FIPS)
+    hw_code: D112
+    status: eosd
+    end_of_sale: 2024-01-01
+    end_of_software_dev: 2026-01-01
+    end_of_technical_support: 2031-01-01
+    end_of_rma: 2032-01-01
+    sku_patterns:
+      - '^F5-BIG-.*-10350V-F(-.*)?$'
+      - '^F5-BIG-10350V-F(-.*)?$'
+
+  - family_id: viprion-c2400
+    display_name: VIPRION C2400 chassis
+    hw_code: F100
+    status: eosd
+    end_of_sale: 2023-04-01
+    end_of_software_dev: 2025-04-01
+    end_of_technical_support: 2030-04-01
+    end_of_rma: 2030-04-01
+    sku_patterns:
+      - '^F5-VPR-.*-C2400(-.*)?$'
+
+  - family_id: viprion-b2250
+    display_name: VIPRION B2250 blade
+    hw_code: A112
+    status: eosd
+    end_of_sale: 2023-04-01
+    end_of_software_dev: 2025-04-01
+    end_of_technical_support: 2030-04-01
+    end_of_rma: 2030-04-01
+    sku_patterns:
+      - '^F5-VPR-.*-B2250(-.*)?$'
+
+  - family_id: velos-bx110
+    display_name: VELOS BX110 blade
+    hw_code: A118
+    status: regular_no_eos
+    end_of_sale: null
+    end_of_software_dev: null
+    end_of_technical_support: null
+    end_of_rma: null
+    notes: No EoS announced. Currently in F5 Regular Support.
+    sku_patterns:
+      - '^F5-VEL-BX110(-.*)?$'
+
+  - family_id: velos-cx410
+    display_name: VELOS CX410 chassis
+    hw_code: F101
+    status: regular_no_eos
+    end_of_sale: null
+    end_of_software_dev: null
+    end_of_technical_support: null
+    end_of_rma: null
+    notes: No EoS announced. Currently in F5 Regular Support.
+    sku_patterns:
+      - '^F5-VEL-CX410(-.*)?$'
+
+# SKUs that match these patterns are recognized as F5-related but are not
+# hardware platforms with their own lifecycle dates. They are annotated
+# with a category instead of dates so the user can see they were not skipped.
+non_hardware_patterns:
+  - category: Service contract
+    note: Service SKU — covers a separate hardware platform; lifecycle follows the covered product.
+    patterns:
+      - '^F5-SVC-'
+
+  - category: Add-on / chassis option
+    note: Add-on license — lifecycle follows the host platform.
+    patterns:
+      - '^F5-ADD-VPR-'
+      - '^F5-ADD-FIPS'
+
+  - category: Virtual Edition (software)
+    note: BIG-IP VE is software; lifecycle is governed by software version, not hardware EoL.
+    patterns:
+      - '^F5-BIG-.*-VE(-.*)?$'
+      - '^F5-BIG-LTM-VE-'
+      - '^F5-BT-.*-BUNDLE$'
+      - '^F5-BIG-MSP-'
+      - '^F5-BIG-SPTUS'
+
+  - category: BIG-IQ (management software)
+    note: BIG-IQ is software; lifecycle is governed by software version, not hardware EoL.
+    patterns:
+      - '^F5-BIQ-'
+
+  - category: ELA / billing line
+    note: Enterprise License Agreement billing line — no lifecycle.
+    patterns:
+      - '^F5-ELA-'
+
+  - category: Consulting / professional services
+    note: Consulting line — no lifecycle.
+    patterns:
+      - '^F5-CST-'
