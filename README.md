@@ -171,7 +171,7 @@ deliverable — the local DB is a convenience cache, not authoritative.
 
 ---
 
-## ⚠️ Customer data — do NOT commit
+## Customer data — do NOT commit
 
 Real BOMs, RFQs, and inventories contain serial numbers, project codenames,
 and customer/contact info. The included [`.gitignore`](.gitignore) excludes
